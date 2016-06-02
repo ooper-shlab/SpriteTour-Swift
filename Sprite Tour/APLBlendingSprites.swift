@@ -83,7 +83,7 @@ class APLBlendingSprites: APLCommonScene {
     private func newAddLightAction() -> SKAction {
         // This sequence uses a custom method to add the light, then it waits for a random period of time.
         let sequence = SKAction.sequence([
-            SKAction.performSelector("addLight", onTarget: self),
+            SKAction.performSelector(#selector(APLBlendingSprites.addLight), onTarget: self),
             SKAction.waitForDuration(0.50, withRange: 0.10)
             ])
         return SKAction.repeatActionForever(sequence)
