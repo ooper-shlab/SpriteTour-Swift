@@ -67,7 +67,7 @@ class APLAppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet private weak var buttonMatrix: NSMatrix!
     
     
-    func applicationDidFinishLaunching(notification: NSNotification) {
+    func applicationDidFinishLaunching(_ notification: Notification) {
         self.skView.showsFPS = true
         self.skView.showsNodeCount = true
         self.skView.showsDrawCount = true
@@ -83,9 +83,9 @@ class APLAppDelegate: NSObject, NSApplicationDelegate {
     }
     
     
-    private func presentSceneAtIndex(index: Int) {
+    private func presentSceneAtIndex(_ index: Int) {
         /* Pick a size for the scene */
-        let size = CGSizeMake(1024, 768)
+        let size = CGSize(width: 1024, height: 768)
         
         let scene: SKScene
         
@@ -113,13 +113,13 @@ class APLAppDelegate: NSObject, NSApplicationDelegate {
         }
         
         /* Set the scale mode to scale to fit the window */
-        scene.scaleMode = .AspectFit
+        scene.scaleMode = .aspectFit
         self.skView.presentScene(scene)
         
     }
     
     
-    func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true
     }
     

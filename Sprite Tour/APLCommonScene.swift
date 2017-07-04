@@ -69,7 +69,7 @@ class APLCommonScene: SKScene {
     an architecture where a scene may be presented more than once, you need to ensure that the scene's contents
     are only created once.
     */
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         self.createSceneContents()
     }
     

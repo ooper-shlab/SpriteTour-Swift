@@ -62,10 +62,11 @@ class APLBasicSprites: APLCommonScene {
     
     
     override func createSceneContents() {
-        self.backgroundColor = SKColor.blackColor()
-        self.scaleMode = .AspectFit
+        self.backgroundColor = SKColor.black
+        self.scaleMode = .aspectFit
         
         self.addTexturedSprite()
+        self.addColoredSprite()
     }
     
     private func addTexturedSprite() {
@@ -74,8 +75,8 @@ class APLBasicSprites: APLCommonScene {
         */
         let sprite = SKSpriteNode(imageNamed: "rocket.png")
         
-        sprite.position = CGPointMake(CGRectGetMidX(self.frame)-200,
-            CGRectGetMidY(self.frame))
+        sprite.position = CGPoint(x: self.frame.midX-200,
+            y: self.frame.midY)
         self.addChild(sprite)
         
         self.addDescription(NSLocalizedString("Texture Sprite", comment: ""), toSprite: sprite)
@@ -86,20 +87,20 @@ class APLBasicSprites: APLCommonScene {
         /*
         Creates a colored sprite and adds it to the scene. A label is added as a child of the sprite; if the sprite moves, the label moves with it.
         */
-        let sprite = SKSpriteNode(color: SKColor.redColor(), size: CGSizeMake(128,128))
+        let sprite = SKSpriteNode(color: .red, size: CGSize(width: 128,height: 128))
         
-        sprite.position = CGPointMake(CGRectGetMidX(self.frame)+200,
-            CGRectGetMidY(self.frame))
+        sprite.position = CGPoint(x: self.frame.midX+200,
+            y: self.frame.midY)
         self.addChild(sprite)
         
         self.addDescription(NSLocalizedString("Color Sprite", comment: ""), toSprite: sprite)
     }
     
-    private func addDescription(description: String, toSprite sprite: SKSpriteNode) {
+    private func addDescription(_ description: String, toSprite sprite: SKSpriteNode) {
         let myLabel = SKLabelNode(fontNamed: "Helvetica")
         myLabel.text = description
         myLabel.fontSize = 18
-        myLabel.position = CGPointMake(0,-sprite.size.height/2 - 30)
+        myLabel.position = CGPoint(x: 0,y: -sprite.size.height/2 - 30)
         sprite.addChild(myLabel)
     }
     

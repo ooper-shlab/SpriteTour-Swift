@@ -58,7 +58,7 @@
 import SpriteKit
 
 private let kDefaultNumberOfWalkFrames = 28
-private let showCharacterFramesOverOneSecond = 1.0 / NSTimeInterval(kDefaultNumberOfWalkFrames)
+private let showCharacterFramesOverOneSecond = 1.0 / TimeInterval(kDefaultNumberOfWalkFrames)
 
 @objc(APLAnimatingSprites)
 class APLAnimatingSprites: APLCommonScene {
@@ -71,22 +71,22 @@ class APLAnimatingSprites: APLCommonScene {
         
         // Create the sprite with the initial frame.
         let sprite = SKSpriteNode(texture: self.walkFrames[0])
-        sprite.position = CGPointMake(CGRectGetMidX(self.frame),
-            CGRectGetMidY(self.frame))
+        sprite.position = CGPoint(x: self.frame.midX,
+            y: self.frame.midY)
         self.addChild(sprite)
         
         // Cycle through the frames.
-        let animateFramesAction = SKAction.animateWithTextures(self.walkFrames,
+        let animateFramesAction = SKAction.animate(with: self.walkFrames,
             timePerFrame: showCharacterFramesOverOneSecond,
             resize: true,
             restore: false)
-        sprite.runAction(SKAction.repeatActionForever(animateFramesAction))
+        sprite.run(SKAction.repeatForever(animateFramesAction))
         
         self.addSceneDescriptionLabel()
     }
     
     
-    private func animationFramesForImageNamePrefix(baseImageName: String, frameCount count: Int) -> [SKTexture] {
+    private func animationFramesForImageNamePrefix(_ baseImageName: String, frameCount count: Int) -> [SKTexture] {
         /* Loads a series of frames from files stored in the app bundle, returning them in an array. */
         var array: [SKTexture] = []
         for i in 1...count {
@@ -105,7 +105,7 @@ class APLAnimatingSprites: APLCommonScene {
         let myLabel = SKLabelNode(fontNamed: "Helvetica")
         myLabel.text = NSLocalizedString("This sprite is animating through a series of texture images.", comment: "")
         myLabel.fontSize = 18
-        myLabel.position = CGPointMake(CGRectGetMidX(self.frame), 100)
+        myLabel.position = CGPoint(x: self.frame.midX, y: 100)
         self.addChild(myLabel)
     }
     

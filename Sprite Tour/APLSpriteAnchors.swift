@@ -79,9 +79,9 @@ class APLSpriteAnchors : APLCommonScene {
                 let y = CGFloat(iy)
                 let sprite = SKSpriteNode(imageNamed: "rocket.png")
                 sprite.setScale(0.25)
-                sprite.anchorPoint = CGPointMake(0.25*x, 0.25*y)
-                sprite.position = CGPointMake(CGRectGetMidX(self.frame)-400+100*x,
-                    CGRectGetMidY(self.frame)-200+100*y)
+                sprite.anchorPoint = CGPoint(x: 0.25*x, y: 0.25*y)
+                sprite.position = CGPoint(x: self.frame.midX-400+100*x,
+                    y: self.frame.midY-200+100*y)
                 self.addChild(sprite)
                 self.addAnchorDotToSprite(sprite)
             }
@@ -94,25 +94,25 @@ class APLSpriteAnchors : APLCommonScene {
         */
         let animatedSprite = SKSpriteNode(imageNamed: "rocket.png")
         
-        animatedSprite.position = CGPointMake(CGRectGetMidX(self.frame)+200,
-            CGRectGetMidY(self.frame))
-        animatedSprite.anchorPoint = CGPointZero
+        animatedSprite.position = CGPoint(x: self.frame.midX+200,
+            y: self.frame.midY)
+        animatedSprite.anchorPoint = CGPoint.zero
         self.addChild(animatedSprite)
         self.addAnchorDotToSprite(animatedSprite)
         
-        animatedSprite.runAction(self.newAnimateAnchorAction())
+        animatedSprite.run(self.newAnimateAnchorAction())
     }
     
-    private func addAnchorDotToSprite(sprite: SKSpriteNode) {
+    private func addAnchorDotToSprite(_ sprite: SKSpriteNode) {
         // We use a shape node for the dot, using a simple circle.
         let dot = SKShapeNode()
         
-        let myPath = CGPathCreateMutable()
-        CGPathAddArc(myPath, nil, 0, 0, 3, 0, CGFloat(M_2_PI), true)
-        CGPathCloseSubpath(myPath)
+        let myPath = CGMutablePath()
+        myPath.addArc(center: CGPoint(x: 0, y: 0), radius: 3, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
+        myPath.closeSubpath()
         
         dot.path = myPath
-        dot.fillColor = SKColor.blueColor()
+        dot.fillColor = SKColor.blue
         dot.lineWidth = 0.0
         
         sprite.addChild(dot)
@@ -122,35 +122,35 @@ class APLSpriteAnchors : APLCommonScene {
         // Normally, you can't directly animate an anchor point, but you can build a custom action to so do.
         // This method builds a bunch of custom actions, then combines them in a repeating sequence.
         
-        let moveAnchorRight = SKAction.customActionWithDuration(1.0) {node, elapsedTime in
+        let moveAnchorRight = SKAction.customAction(withDuration: 1.0) {node, elapsedTime in
             let sprite = node as! SKSpriteNode
-            sprite.anchorPoint = CGPointMake(elapsedTime,0.0)
+            sprite.anchorPoint = CGPoint(x: elapsedTime,y: 0.0)
         }
         
-        let moveAnchorUp = SKAction.customActionWithDuration(1.0) {node, elapsedTime in
+        let moveAnchorUp = SKAction.customAction(withDuration: 1.0) {node, elapsedTime in
             let sprite = node as! SKSpriteNode
-            sprite.anchorPoint = CGPointMake(1.0,elapsedTime)
+            sprite.anchorPoint = CGPoint(x: 1.0,y: elapsedTime)
         }
         
-        let moveAnchorLeft = SKAction.customActionWithDuration(1.0) {node, elapsedTime in
+        let moveAnchorLeft = SKAction.customAction(withDuration: 1.0) {node, elapsedTime in
             let sprite = node as! SKSpriteNode
-            sprite.anchorPoint = CGPointMake(1.0-elapsedTime,1.0)
+            sprite.anchorPoint = CGPoint(x: 1.0-elapsedTime,y: 1.0)
         }
         
-        let moveAnchorDown = SKAction.customActionWithDuration(1.0) {node, elapsedTime in
+        let moveAnchorDown = SKAction.customAction(withDuration: 1.0) {node, elapsedTime in
             let sprite = node as! SKSpriteNode
-            sprite.anchorPoint = CGPointMake(0,1.0-elapsedTime)
+            sprite.anchorPoint = CGPoint(x: 0,y: 1.0-elapsedTime)
         }
         
         let sequence = SKAction.sequence([moveAnchorRight, moveAnchorUp, moveAnchorLeft, moveAnchorDown])
-        return SKAction.repeatActionForever(sequence)
+        return SKAction.repeatForever(sequence)
     }
     
     private func addSceneDescriptionLabel() {
         let myLabel = SKLabelNode(fontNamed: "Helvetica")
         myLabel.text = NSLocalizedString("The dots mark the actual position of each sprite node.", comment: "")
         myLabel.fontSize = 18
-        myLabel.position = CGPointMake(CGRectGetMidX(self.frame),100)
+        myLabel.position = CGPoint(x: self.frame.midX,y: 100)
         self.addChild(myLabel)
     }
     

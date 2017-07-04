@@ -68,54 +68,74 @@ class APLResizingSprites: APLCommonScene {
     
     private func addResizingSprites() {
         /*
-        Creates a pair of sprites. One uses the default scaling behavior, and the other uses
-        a custom center rect. The corners of the UI button are a fixed size, and the remaining
-        part of the texture is scaled.
-        */
+         Creates a pair of sprites. One uses the default scaling behavior, and the other uses
+         a custom center rect. The corners of the UI button are a fixed size, and the remaining
+         part of the texture is scaled.
+         */
         let texture = SKTexture(imageNamed: "stretchable_image.png")
         let resizeSpritesAction = self.newResizeSpriteAction(texture)
         
         let defaultSprite = SKSpriteNode(texture: texture)
-        defaultSprite.position = CGPointMake(CGRectGetMidX(self.frame)-192, CGRectGetMidY(self.frame))
+        defaultSprite.position = CGPoint(x: self.frame.midX-192, y: self.frame.midY)
         self.addChild(defaultSprite)
-        defaultSprite.runAction(resizeSpritesAction)
-        self.addDescription(NSLocalizedString("Resized with default stretching", comment: ""), toSprite: defaultSprite)
+        defaultSprite.run(resizeSpritesAction)
+        self.addDescription(NSLocalizedString("Resized with default stretching", comment: ""), to: defaultSprite)
         
         let customSprite = SKSpriteNode(texture: texture)
-        customSprite.position = CGPointMake(CGRectGetMidX(self.frame)+192,CGRectGetMidY(self.frame))
+        customSprite.position = CGPoint(x: self.frame.midX+192,y: self.frame.midY)
         // the center rect calculation is always based on the artwork. In this case
         // the artwork is a 28 x 28 pixel image with a 4 x 4 pixel stretchable center.
-        customSprite.centerRect = CGRectMake(12.0/28.0,12.0/28.0,4.0/28.0,4.0/28.0)
+        customSprite.centerRect = CGRect(x: 12.0/28.0,y: 12.0/28.0,width: 4.0/28.0,height: 4.0/28.0)
         self.addChild(customSprite)
-        customSprite.runAction(resizeSpritesAction)
-        self.addDescription(NSLocalizedString("Resized with custom stretching", comment: ""), toSprite: customSprite)
+        customSprite.run(resizeSpritesAction)
+        self.addDescription(NSLocalizedString("Resized with custom stretching", comment: ""), to: customSprite)
     }
     
     
-    private func newResizeSpriteAction(texture: SKTexture) -> SKAction {
+    private func newResizeSpriteAction(_ texture: SKTexture) -> SKAction {
         /*
-        Creates and returns an action sequence that resizes a sprite through a variety of sizes.
-        It then returns the sprite back to its normal default size.
-        */
-        let sequence = SKAction.sequence([
-            SKAction.waitForDuration(1.0),
-            SKAction.resizeToWidth(192, height: 192, duration: 1.0),
-            SKAction.waitForDuration(1.0),
-            SKAction.resizeToWidth(128, height: 192, duration: 1.0),
-            SKAction.waitForDuration(1.0),
-            SKAction.resizeToWidth(256, height: 128, duration: 1.0),
-            SKAction.waitForDuration(1.0),
-            SKAction.resizeToWidth(texture.size().width, height: texture.size().height, duration: 1.0)
-            ])
-        return SKAction.repeatActionForever(sequence)
+         Creates and returns an action sequence that resizes a sprite through a variety of sizes.
+         It then returns the sprite back to its normal default size.
+         */
+        if #available(macOS 10.12, *) {
+            let sequence = SKAction.sequence([
+                SKAction.wait(forDuration: 1.0),
+                SKAction.scale(to: CGSize(width: 192, height: 192), duration: 1.0),
+                SKAction.wait(forDuration: 1.0),
+                SKAction.scale(to: CGSize(width: 128, height: 192), duration: 1.0),
+                SKAction.wait(forDuration: 1.0),
+                SKAction.scale(to: CGSize(width: 256, height: 128), duration: 1.0),
+                SKAction.wait(forDuration: 1.0),
+                SKAction.scale(to: CGSize(width: texture.size().width, height: texture.size().height), duration: 1.0)
+                ])
+            return SKAction.repeatForever(sequence)
+        } else {
+            let sequence = SKAction.sequence([
+                SKAction.wait(forDuration: 1.0),
+                //SKAction.resize(toWidth: 192, height: 192, duration: 1.0),
+                SKAction.scaleX(to: 192/28.0, y: 192/28.0, duration: 1.0),
+                SKAction.wait(forDuration: 1.0),
+                //SKAction.resize(toWidth: 128, height: 192, duration: 1.0),
+                SKAction.scaleX(to: 128/28.0, y: 192/28.0, duration: 1.0),
+                SKAction.wait(forDuration: 1.0),
+                //SKAction.resize(toWidth: 256, height: 128, duration: 1.0),
+                SKAction.scaleX(to: 256/28.0, y: 128/28.0, duration: 1.0),
+                SKAction.wait(forDuration: 1.0),
+                //SKAction.resize(toWidth: texture.size().width, height: texture.size().height, duration: 1.0)
+                SKAction.scaleX(to: 1.0, y: 1.0, duration: 1.0),
+                ])
+            return SKAction.repeatForever(sequence)
+        }
     }
     
-    private func addDescription(description: String, toSprite sprite: SKSpriteNode) {
+    private func addDescription(_ description: String, to sprite: SKSpriteNode) {
         let myLabel = SKLabelNode(fontNamed: "Helvetica")
         myLabel.text = description
         myLabel.fontSize = 18
-        myLabel.position = CGPointMake(0,-128)
-        sprite.addChild(myLabel)
+        //myLabel.position = CGPoint(x: 0,y: -128)
+        //sprite.addChild(myLabel)
+        myLabel.position = CGPoint(x: sprite.position.x, y: sprite.position.y-128)
+        self.addChild(myLabel)
     }
     
 }

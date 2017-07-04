@@ -64,8 +64,8 @@ class APLColorizedSprites: APLCommonScene {
     
     
     override func createSceneContents() {
-        self.backgroundColor = SKColor.blackColor()
-        self.scaleMode = .AspectFit
+        self.backgroundColor = SKColor.black
+        self.scaleMode = .aspectFit
         
         // Allocate a single sprite and copy it to make the other sprites.
         let sprite = SKSpriteNode(imageNamed: "rocket.png")
@@ -75,10 +75,10 @@ class APLColorizedSprites: APLCommonScene {
         self.addBlendFactorLabels()
         
         // Add rows of sprites for a different colors.
-        self.addColorRow(SKColor.redColor(), forRow: 0)
-        self.addColorRow(SKColor.greenColor(), forRow: 1)
-        self.addColorRow(SKColor.blueColor(), forRow: 2)
-        self.addColorRow(SKColor.yellowColor(), forRow: 3)
+        self.addColorRow(SKColor.red, forRow: 0)
+        self.addColorRow(SKColor.green, forRow: 1)
+        self.addColorRow(SKColor.blue, forRow: 2)
+        self.addColorRow(SKColor.yellow, forRow: 3)
         
         self.addAnimatedSprite()
     }
@@ -92,24 +92,24 @@ class APLColorizedSprites: APLCommonScene {
         let descriptionLabel = SKLabelNode(fontNamed: "Helvetica")
         descriptionLabel.fontSize = 18
         descriptionLabel.text = NSLocalizedString("Color blend factor:", comment: "")
-        descriptionLabel.horizontalAlignmentMode = .Left
-        descriptionLabel.position = CGPointMake(80,
-            CGRectGetMaxY(self.frame)-70)
+        descriptionLabel.horizontalAlignmentMode = .left
+        descriptionLabel.position = CGPoint(x: 80,
+            y: self.frame.maxY-70)
         self.addChild(descriptionLabel)
         
         for i in 0...10 {
             let numberLabel = SKLabelNode(fontNamed: "Helvetica")
             numberLabel.text = String(format: "%4.2f", Double(i)/10.0)
             numberLabel.fontSize = 18
-            numberLabel.position = CGPointMake(100 + CGFloat(i) * (self.spriteTemplate.size.width + 10),
-                CGRectGetMaxY(self.frame)-90)
+            numberLabel.position = CGPoint(x: 100 + CGFloat(i) * (self.spriteTemplate.size.width + 10),
+                y: self.frame.maxY-90)
             
             self.addChild(numberLabel)
         }
     }
     
     
-    private func addColorRow(color: SKColor, forRow row: Int) {
+    private func addColorRow(_ color: SKColor, forRow row: Int) {
         /*
         Adds a row of sprites to the scene, showing how a sprite is affected by the blended color.
         */
@@ -117,17 +117,17 @@ class APLColorizedSprites: APLCommonScene {
             let s = self.spriteTemplate.copy() as! SKSpriteNode
             s.color = color
             s.colorBlendFactor = 0.1 * CGFloat(i)
-            s.position = CGPointMake(100 + CGFloat(i) * (self.spriteTemplate.size.width + 10),
-                100 + CGFloat(row) * (self.spriteTemplate.size.height + 10)
+            s.position = CGPoint(x: 100 + CGFloat(i) * (self.spriteTemplate.size.width + 10),
+                y: 100 + CGFloat(row) * (self.spriteTemplate.size.height + 10)
             )
             
             self.addChild(s)
         }
         
         // And a simple color node to show the actual blend color.
-        let colorSwash = SKSpriteNode(color: color, size: CGSizeMake(64,64))
-        colorSwash.position = CGPointMake(100 + 12 * (self.spriteTemplate.size.width + 10),
-            100 + CGFloat(row) * (self.spriteTemplate.size.height + 10)
+        let colorSwash = SKSpriteNode(color: color, size: CGSize(width: 64,height: 64))
+        colorSwash.position = CGPoint(x: 100 + 12 * (self.spriteTemplate.size.width + 10),
+            y: 100 + CGFloat(row) * (self.spriteTemplate.size.height + 10)
         )
         
         self.addChild(colorSwash)
@@ -139,10 +139,10 @@ class APLColorizedSprites: APLCommonScene {
         Adds a sprite to the scene, and animates its blend color.
         */
         let animatedSprite = self.spriteTemplate.copy() as! SKSpriteNode
-        animatedSprite.position = CGPointMake(925,384)
+        animatedSprite.position = CGPoint(x: 925,y: 384)
         self.addChild(animatedSprite)
         
-        animatedSprite.runAction(self.newAnimateColorsAction())
+        animatedSprite.run(self.newAnimateColorsAction())
         
         // Label the sprite.
         // Normally, this would be attached to the sprite. But in this scene, the sprite is scaled
@@ -151,7 +151,7 @@ class APLColorizedSprites: APLCommonScene {
         let myLabel = SKLabelNode(fontNamed: "Helvetica")
         myLabel.text = NSLocalizedString("Animated Color Blending", comment: "")
         myLabel.fontSize = 14
-        myLabel.position = CGPointMake(animatedSprite.position.x, animatedSprite.position.y - 90)
+        myLabel.position = CGPoint(x: animatedSprite.position.x, y: animatedSprite.position.y - 90)
         self.addChild(myLabel)
     }
     
@@ -161,19 +161,19 @@ class APLColorizedSprites: APLCommonScene {
         Creates and returns an action sequence that animates a sprite's blend color.
         */
         let  sequence = SKAction.sequence([
-            SKAction.waitForDuration(1.0),
-            SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 1.0, duration: 1.0),
-            SKAction.waitForDuration(1.0),
-            SKAction.colorizeWithColor(SKColor.greenColor(), colorBlendFactor: 1.0, duration: 1.0),
-            SKAction.waitForDuration(1.0),
-            SKAction.colorizeWithColor(SKColor.blueColor(), colorBlendFactor: 1.0, duration: 1.0),
-            SKAction.waitForDuration(1.0),
-            SKAction.colorizeWithColor(SKColor.yellowColor(), colorBlendFactor: 1.0, duration: 1.0),
-            SKAction.waitForDuration(1.0),
-            SKAction.colorizeWithColorBlendFactor(0.0, duration: 1.0)
+            SKAction.wait(forDuration: 1.0),
+            SKAction.colorize(with: SKColor.red, colorBlendFactor: 1.0, duration: 1.0),
+            SKAction.wait(forDuration: 1.0),
+            SKAction.colorize(with: SKColor.green, colorBlendFactor: 1.0, duration: 1.0),
+            SKAction.wait(forDuration: 1.0),
+            SKAction.colorize(with: SKColor.blue, colorBlendFactor: 1.0, duration: 1.0),
+            SKAction.wait(forDuration: 1.0),
+            SKAction.colorize(with: SKColor.yellow, colorBlendFactor: 1.0, duration: 1.0),
+            SKAction.wait(forDuration: 1.0),
+            SKAction.colorize(withColorBlendFactor: 0.0, duration: 1.0)
             ])
         
-        return SKAction.repeatActionForever(sequence)
+        return SKAction.repeatForever(sequence)
     }
     
 }

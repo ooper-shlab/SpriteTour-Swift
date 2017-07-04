@@ -60,10 +60,10 @@ import SpriteKit
 
 // Useful random functions.
 private func myRandf() -> CGFloat {
-    return CGFloat(rand()) / CGFloat(RAND_MAX)
+    return CGFloat(arc4random()) / CGFloat(RAND_MAX)
 }
 
-private func myRand(low: CGFloat, _ high: CGFloat) -> CGFloat {
+private func myRand(_ low: CGFloat, _ high: CGFloat) -> CGFloat {
     return myRandf() * (high - low) + low
 }
 
@@ -77,16 +77,16 @@ class APLBlendingSprites: APLCommonScene {
         The scene is a node, so it can run actions. In this scene, it periodically creates
         a new light and adds it to itself.
         */
-        self.runAction(self.newAddLightAction())
+        self.run(self.newAddLightAction())
     }
     
     private func newAddLightAction() -> SKAction {
         // This sequence uses a custom method to add the light, then it waits for a random period of time.
         let sequence = SKAction.sequence([
-            SKAction.performSelector(#selector(APLBlendingSprites.addLight), onTarget: self),
-            SKAction.waitForDuration(0.50, withRange: 0.10)
+            SKAction.perform(#selector(APLBlendingSprites.addLight), onTarget: self),
+            SKAction.wait(forDuration: 0.50, withRange: 0.10)
             ])
-        return SKAction.repeatActionForever(sequence)
+        return SKAction.repeatForever(sequence)
     }
     
     @objc func addLight() {
@@ -94,9 +94,9 @@ class APLBlendingSprites: APLCommonScene {
         Create a new light and add it to the scene. The light uses an additive blend mode.
         */
         let sprite = SKSpriteNode(imageNamed: "spark.png")
-        sprite.position = CGPointMake(myRand(-150,150)+CGRectGetMidX(self.frame),
-            myRand(-150,150)+CGRectGetMidY(self.frame))
-        sprite.blendMode = .Add
+        sprite.position = CGPoint(x: myRand(-150,150)+self.frame.midX,
+            y: myRand(-150,150)+self.frame.midY)
+        sprite.blendMode = .add
         
         // these values were chosen only for the aesthetic effect.
         sprite.alpha = 0.5
@@ -110,7 +110,7 @@ class APLBlendingSprites: APLCommonScene {
         let myLabel = SKLabelNode(fontNamed: "Helvetica")
         myLabel.text = NSLocalizedString("These textured sprite nodes are combined using an additive blend.", comment: "")
         myLabel.fontSize = 18
-        myLabel.position = CGPointMake(CGRectGetMidX(self.frame), 100)
+        myLabel.position = CGPoint(x: self.frame.midX, y: 100)
         self.addChild(myLabel)
     }
     
